@@ -27,7 +27,9 @@ demo.pyでは, images/Lenna.jpgを読み込み,
 * 各周波数切り捨てのレベル(level\_i, level\_j)により高周波を消去した画像を生成します.
 * 高周波数のレベルは(level\_i=0~8, level\_j=0~8)64段階あり、それら全ての画像を生成します.
 * 生成した64の画像を一つに合わせて'images/Lenna-8x8.jpg'に出力します.
+* 以下のような画像が生成されます(右下から左上に向かって圧縮率が高い).
 
+![実行例](https://github.com/cozysfc/imarray/blob/master/images/Lenna_jpeg_example_8x8_concatenated.jpg)
 
 ## デモの実行まで
 
