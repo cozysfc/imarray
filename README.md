@@ -3,6 +3,7 @@
 imarrayはnumpy.ndarrayを用いたオレオレデータ構造でnumpyの行列演算, 幾つかのPIL API, 画像の表示やファイルの入出力等を行ないます. 
 このimarrayを用いて, DCT変換とそれを用いたJPEG変換のデモを実装しました. 
 
+![](https://github.com/cozysfc/imarray/blob/master/images/Lenna_jpeg_example_domain_striped.jpg)
 
 ## 構成
 
