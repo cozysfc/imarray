@@ -116,7 +116,6 @@ class JPEG:
 
             # Compress AC components by Zero Length Encoder.
             ac_components = zigzag_sequence[1:]
-            print ac_components
             zero_length_encoded_components = ZeroLengthEncoder.encode(ac_components)
 
             # Additionaly compress AC components by Huffman Encoder.
