@@ -88,20 +88,27 @@ class imarray(ndarray):
     def toimage(self):
         return Image.fromarray(self)
 
-    def slice(self, width=8, height=8):
+    def slice(self, width=8, height=8, _enumerate=False):
         w, h = self.shape
-        for i in xrange(0, w, width):
-            for j in xrange(0, h, height):
-                yield (i,i+width), (j,j+height), self[i:i+width,j:j+height]
+        if _enumerate:
+            for idx_i, i in enumerate(xrange(0, w, width)):
+                for idx_j, j in enumerate(xrange(0, h, height)):
+                    yield (idx_i,idx_j), (i,i+width), (j,j+height), self[i:i+width,j:j+height]
+        else:
+            for i in xrange(0, w, width):
+                for j in xrange(0, h, height):
+                    yield (i,i+width), (j,j+height), self[i:i+width,j:j+height]
 
-    def show(self, force=False):
+    def show(self, force=False, scale=False):
         if self.size > 15000000:
             if force == False:
                 print "too big image size, use force option"
                 return -1
 
-        Image.fromarray(self.astype(uint8)).show()
-        return 0
+        if scale:
+            Image.fromarray(self.astype(uint8)).show()
+        else:
+            Image.fromarray(self).show()
 
     @staticmethod
     def uint8scale(array):

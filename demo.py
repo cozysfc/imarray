@@ -1,37 +1,55 @@
 # coding:utf-8
 
 
-import os
-import sys
-import numpy as np
+import time
+import click
 
 from jpeg import JPEG
+from numpy import empty
 from imarray import imarray
 
 
-TARGET_IMAGE = "images/Lenna.jpg"
-OUTPUT_PATH  = "images/Lenna-8x8.jpg"
+FPATH = "images/Lenna.jpg"
 
 
-if __name__ == "__main__":
+# cmd group
+@click.group()
+def cmd():
+    pass
+
+
+# run demo
+@cmd.command(help="")
+@click.argument('fpath', type=click.Path(), default=FPATH)
+def run(fpath):
+
     # load target file
-    imArray = imarray.load(TARGET_IMAGE)
+    print "loading image: {}".format(fpath)
+    imArray = imarray.load(fpath)
 
     # construct jpeg
     jpeg  = JPEG()
 
-    # compress target file
-    # for each level_i,j (i=0~8, j=0~8)
-    result = [(i, j, jpeg.compress(imArray, level_i=i, level_j=j))
-            for i in range(8)
-            for j in range(8)]
+    # encode image
+    encoded_dc_components, encoded_ac_components, shape = jpeg.encode(imArray)
+    print u"↑ Huffman Table of DC Components"
 
-    # concatenate into 8x8
-    w, h = imArray.shape
-    concatenate = np.zeros((8*w, 8*h))
+    # decode image
+    decoded_imArray = jpeg.decode(encoded_dc_components, encoded_ac_components, shape)
 
-    for i, j, x in result:
-        concatenate[i*w:(i+1)*w, j*h:(j+1)*h] += x
+    # concatenate and show images
+    shape_x, shape_y = imArray.shape
+    result = imarray(empty((shape_x*2, shape_y)))
 
-    # save image
-    imarray(concatenate).save(OUTPUT_PATH)
+    # upper image is original, lower image is compressed
+    result[0:shape_x, 0:shape_y] += imArray
+    result[shape_x:shape_x*2, 0:shape_y] += decoded_imArray
+    result.show()
+
+
+def main():
+    cmd(obj={})
+
+
+if __name__ == "__main__":
+    main()
